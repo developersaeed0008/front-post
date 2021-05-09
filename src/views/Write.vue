@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-import { postData } from "@/plugins/axios";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -59,18 +59,17 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["createPost"]),
     async savePost() {
       try {
         if (!this.$refs.form.validate()) {
           return;
         }
-        this.loading = true;
-
-        await postData("add-post", JSON.stringify(this.post));
-
+        await this.createPost(this.post);
         this.loading = false;
         this.post.text = "";
-        this.msg.text = "post create success";
+
+        this.msg.text = "post created successfully !";
         this.msg.show = true;
         this.msg.color = "success";
       } catch (err) {
@@ -80,6 +79,7 @@ export default {
       }
     },
   },
+  computed: {},
 };
 </script>
 <style>

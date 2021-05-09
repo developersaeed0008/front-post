@@ -47,7 +47,7 @@
                   depressed
                   class="mr-4"
                   v-if="!post.edit"
-                  @click="deletePost(post)"
+                  @click="delPost(post)"
                   ><v-icon> mdi-delete-outline </v-icon>
                 </v-btn>
                 <v-btn
@@ -118,8 +118,7 @@
   </div>
 </template>
 <script>
-import { postData } from "@/plugins/axios";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import moment from "moment";
 
@@ -143,36 +142,17 @@ export default {
         (v) => !!v || "This field is required",
         (v) => v.length >= 10 || "Minimum length is 10 characters",
       ],
-      msg: {
-        show: false,
-        text: "",
-        color: "black",
-      },
     };
   },
   computed: {
     avatar() {
       return "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light";
     },
-    ...mapGetters(["Posts", "loading"]),
+    ...mapGetters(["Posts", "loading", "msg"]),
   },
   methods: {
-    async updatePost(post) {
-      try {
-        post.id = post._id;
-        await postData("update-post", JSON.stringify(post));
-        post.edit = false;
-
-        this.msg.text = "post update success";
-        this.msg.show = true;
-        this.msg.color = "success";
-      } catch (err) {
-        this.msg.text = err.message;
-        this.msg.show = true;
-        this.msg.color = "success";
-      }
-    },
-    deletePost(post) {
+    ...mapActions(["updatePost", "likePost", "deletePost"]),
+    delPost(post) {
       try {
         this.$swal
           .fire({
@@ -186,35 +166,18 @@ export default {
           })
           .then((result) => {
             if (result.isConfirmed) {
-              const id = post._id;
-              postData("delete-post", JSON.stringify({ id })).then(() => {
-                this.posts = this.posts.filter((post) => post._id != id);
-
-                this.msg.text = "post has been deleted";
-                this.msg.show = true;
-                this.msg.color = "success";
-              });
+              this.deletePost(post._id);
             }
           });
       } catch (err) {
-        this.msg.text = err.message;
-        this.msg.show = true;
-        this.msg.color = "danger";
+        this.$store.commit("setMsg", {
+          text: err.message,
+          show: true,
+          color: "red",
+        });
       }
     },
-    async likePost(post) {
-      try {
-        post.liked = !post.liked;
-        await postData(
-          "like-post",
-          JSON.stringify({ id: post._id, liked: post.liked })
-        );
-      } catch (err) {
-        this.msg.text = err.message;
-        this.msg.show = true;
-        this.msg.color = "success";
-      }
-    },
+
     getDate(date) {
       if (moment(date) > moment().add(-1, "years"))
         return moment(date).fromNow();
