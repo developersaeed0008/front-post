@@ -199,6 +199,29 @@ export default {
 };
 </script>
 <style>
+/*
+ * Droid Arabic Kufi (Arabic) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: "Droid Arabic Kufi";
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/droidarabickufi/v6/DroidKufi-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/droidarabickufi/v6/DroidKufi-Regular.eot?#iefix)
+      format("embedded-opentype"),
+    url(//fonts.gstatic.com/ea/droidarabickufi/v6/DroidKufi-Regular.woff2)
+      format("woff2"),
+    url(//fonts.gstatic.com/ea/droidarabickufi/v6/DroidKufi-Regular.woff)
+      format("woff"),
+    url(//fonts.gstatic.com/ea/droidarabickufi/v6/DroidKufi-Regular.ttf)
+      format("truetype");
+}
+
+body,
+.v-application .headline {
+  font-family: "Droid Arabic Kufi", serif !important;
+  font-size: 20px !important;
+}
 .rtl {
   direction: rtl;
 }
