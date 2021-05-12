@@ -35,18 +35,18 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 
-  /* if (to.name != "login")
-    checkAuth() */
+  if (to.name != "login")
+    checkAuth()
 
   return next();
 });
 
-/* function checkAuth() {
+function checkAuth() {
 
   if (!localStorage.getItem('jwt')) {
     return router.push({ 'name': 'login' });
     // console.log("redirect to login");
   }
-} */
+}
 
 export default router
