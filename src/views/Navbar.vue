@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLogin">
+  <div v-if="isAuth">
     <v-toolbar color="primary" dark max-height="52px" dense>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
@@ -10,7 +10,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-btn to="/write" router class="success mx-1">
+      <v-btn @click="showCreatePost = true" class="success mx-1">
         <v-icon left>mdi-plus-circle-outline</v-icon>
         new post
       </v-btn>
@@ -25,34 +25,39 @@
         <v-icon>mdi-bell</v-icon>
       </v-btn>
 
-      <span>Saeed</span>
-      <v-btn class="primary d-none d-sm-flex" small depressed @click="logout">
+      <span class="ml-2">Saeed</span>
+      <v-btn class="primary" small depressed @click="logout">
         <v-icon right>mdi-logout</v-icon>
       </v-btn>
     </v-toolbar>
+    <create-post
+      :show="showCreatePost"
+      @updateDg="updateDialogState"
+    ></create-post>
   </div>
 </template>
 <script>
+import { mapGetters, mapMutations } from "vuex";
+import CreatePost from "./CreatePost";
 export default {
-  data() {
-    return {
-      isLogin: false,
-    };
+  components: {
+    "create-post": CreatePost,
   },
-  mounted() {
-    this.isLogin = localStorage.getItem("jwt");
+  data() {
+    return { showCreatePost: false };
   },
   methods: {
+    ...mapMutations(["setAuth"]),
     logout() {
-      localStorage.removeItem("jwt");
-      this.isLogin = false;
-      this.$router.push({ name: "Login" });
+      this.setAuth(false);
+      this.$router.push({ name: "login" });
+    },
+    updateDialogState(value) {
+      this.showCreatePost = value;
     },
   },
-  watch: {
-    $route() {
-      this.isLogin = localStorage.getItem("jwt");
-    },
+  computed: {
+    ...mapGetters(["isAuth"]),
   },
 };
 </script>

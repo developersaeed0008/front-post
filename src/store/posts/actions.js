@@ -1,4 +1,4 @@
-import { getData, postData } from "@/plugins/axios";
+import { postData } from "@/plugins/axios";
 
 const actions = {
     async getPosts({ commit, state }) {
@@ -7,16 +7,26 @@ const actions = {
 
             commit('setLoading', true);
 
-            const { data } = await getData(`posts?p=${state.limit}`).catch(err => {
+            let { posts } = await postData(`posts`, { 'p': state.limit }).catch(err => {
                 throw new Error(err.response.data.message);
             });
 
-            data.posts.forEach((post) => {
-                post.edit = false;
+            /*   const posts = [
+                  {
+                      id: 1,
+                      _id: 1,
+                      text: 'test post',
+                      postDate: '2021-08-04'
+                  }
+              ]; */
+
+            posts.forEach((post) => {
+                post.showMore = false;
                 post.liked = post.liked ? true : false;
+                post.color = post.color ? post.color : '#fff';
             });
 
-            commit('setPosts', data.posts);
+            commit('setPosts', posts);
             commit('setLimit', state.limit + 10);
             commit('setLoading', false);
 
@@ -33,11 +43,11 @@ const actions = {
     async createPost({ commit }, post) {
         try {
 
-            await postData("add-post", JSON.stringify(post)).catch(err => {
+            const resp = await postData("add-post", JSON.stringify(post)).catch(err => {
                 throw new Error(err.response.data.message);
             });
 
-            commit('createPost', post);
+            commit('createPost', resp.createdPost);
 
 
         } catch (err) {
@@ -68,6 +78,23 @@ const actions = {
         } catch (err) {
 
             commit('setLoading', false);
+            commit('setMsg', {
+                text: err.message,
+                show: true,
+                color: "red",
+            });
+        }
+    },
+    async updateColor({ commit }, post) {
+        try {
+            await postData(
+                "update-post-color",
+                JSON.stringify({ id: post._id, color: post.color })
+            );
+
+            commit('updatePost', post);
+
+        } catch (err) {
             commit('setMsg', {
                 text: err.message,
                 show: true,

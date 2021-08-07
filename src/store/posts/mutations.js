@@ -9,7 +9,10 @@ const mutations = {
         state.limit = limit
     },
     createPost(state, post) {
-        state.posts.push(post);
+        post.showMore = false;
+        post.liked = post.liked ? true : false;
+        post.color = post.color ? post.color : '#fff';
+        state.posts.unshift(post);
     },
     updatePost(state, post) {
         state.posts.forEach(p => {

@@ -8,7 +8,7 @@
         </template>
       </v-snackbar>
       <div v-for="(post, i) in Posts" :key="i" class="mt-5">
-        <v-card color="white">
+        <v-card :color="post.color">
           <v-card-title class="pt-0 pb-0">
             <v-list-item-avatar color="grey darken-3">
               <v-img class="elevation-6" alt="" :src="avatar"></v-img>
@@ -26,17 +26,34 @@
             class="headline text-lg-2 text-right rtl black--text"
             v-if="!post.edit"
           >
-            <div v-html="post.text.replace(/\n/g, '<br />')"></div>
+            <div
+              v-if="post.text.length <= 200 || post.showMore"
+              v-html="post.text.replace(/\n/g, '<br />')"
+            ></div>
+
+            <div
+              v-else
+              v-html="
+                post.text.replace(/\n/g, '<br />').substr(0, 200) + ' ...'
+              "
+            ></div>
+            <v-btn
+              v-if="post.text.length > 200 && !post.showMore"
+              class="ma-4"
+              depressed
+              @click="post.showMore = true"
+              >See More</v-btn
+            >
+
+            <v-btn
+              v-if="post.text.length > 200 && post.showMore"
+              class="ma-4"
+              depressed
+              @click="post.showMore = false"
+              >See Less</v-btn
+            >
           </v-card-text>
-          <v-form v-else>
-            <v-textarea
-              v-model="post.text"
-              :rules="rules"
-              class="headline text-lg-2 text-right rtl ma-2"
-              bordered
-              outlined
-            ></v-textarea>
-          </v-form>
+
           <v-divider></v-divider>
           <v-card-actions>
             <v-list-item>
@@ -55,35 +72,16 @@
                   icon
                   depressed
                   class="mr-4"
-                  v-if="!post.edit"
-                  @click="post.edit = true"
+                  @click="editingPost = post"
                   ><v-icon> mdi-square-edit-outline </v-icon>
                 </v-btn>
 
-                <v-btn
-                  color="red"
-                  icon
-                  depressed
-                  class="mr-4"
-                  v-if="post.edit"
-                  @click="post.edit = false"
-                  ><v-icon> mdi-cancel </v-icon>
-                </v-btn>
-                <v-btn
-                  color="success"
-                  icon
-                  depressed
-                  class="mr-4"
-                  v-if="post.edit"
-                  @click="updatePost(post)"
-                  ><v-icon> mdi-content-save-outline </v-icon>
-                </v-btn>
                 <v-btn
                   color="warning"
                   icon
                   depressed
                   class="mr-4"
-                  v-if="!post.edit"
+                  @click="updatePostDialog(post)"
                   ><v-icon> mdi-palette </v-icon>
                 </v-btn>
                 <v-btn color="info" icon depressed class="mr-4 d-none">
@@ -114,44 +112,54 @@
           :width="7"
         ></v-progress-circular>
       </v-card>
+      <color-palette
+        :show="showPalette"
+        @updateView="updatePaletteState"
+        @selectColor="setPostColor"
+      ></color-palette>
     </v-container>
+    <edit-post
+      v-if="editingPost"
+      :post="editingPost"
+      @updated="updatePostText"
+      @cancelEditing="cancelEdit"
+    ></edit-post>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-
+import ColorPalette from "./ColorPalette.vue";
+import EditPost from "./EditPost.vue";
 import moment from "moment";
 
 export default {
-  async created() {
+  async mounted() {
     window.addEventListener("scroll", this.handleScroll);
-    this.$store.dispatch("getPosts");
+    if (this.isAuth) this.$store.dispatch("getPosts");
+  },
+  components: {
+    "color-palette": ColorPalette,
+    "edit-post": EditPost,
   },
   data() {
     return {
       moment: moment,
-      colors: [
-        "#26c6da",
-        "primary",
-        "red lighten-2",
-        "blue-grey",
-        "success",
-        "warning",
-      ],
+      showPalette: false,
       rules: [
         (v) => !!v || "This field is required",
         (v) => v.length >= 10 || "Minimum length is 10 characters",
       ],
+      editingPost: "",
     };
   },
   computed: {
     avatar() {
       return "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light";
     },
-    ...mapGetters(["Posts", "loading", "msg"]),
+    ...mapGetters(["Posts", "loading", "msg", "isAuth"]),
   },
   methods: {
-    ...mapActions(["updatePost", "likePost", "deletePost"]),
+    ...mapActions(["updatePost", "likePost", "updateColor", "deletePost"]),
     delPost(post) {
       try {
         this.$swal
@@ -177,7 +185,6 @@ export default {
         });
       }
     },
-
     getDate(date) {
       if (moment(date) > moment().add(-1, "years"))
         return moment(date).fromNow();
@@ -189,11 +196,32 @@ export default {
         const { scrollHeight, clientHeight, scrollTop } = dom;
 
         if (scrollTop + clientHeight >= scrollHeight - scrollHeight * 0.05) {
-          this.$store.dispatch("getPosts");
+          if (this.isAuth) this.$store.dispatch("getPosts");
         }
       } catch (err) {
         this.status = err;
       }
+    },
+    updatePostDialog(post) {
+      this.showPalette = true;
+      this.postEditColor = post._id;
+    },
+    updatePaletteState(newState) {
+      this.showPalette = newState;
+    },
+    setPostColor(color) {
+      const post = this.Posts.find((post) => post._id == this.postEditColor);
+      post.color = color;
+      this.updateColor(post);
+      this.postEditColor = "";
+    },
+    updatePostText(text) {
+      this.editingPost.text = text;
+      this.updatePost(this.editingPost);
+      this.editingPost = null;
+    },
+    cancelEdit() {
+      this.editingPost = null;
     },
   },
 };
