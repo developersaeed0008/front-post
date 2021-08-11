@@ -12,7 +12,12 @@
           </template>
         </v-snackbar>
 
-        <editor v-if="post" :text="post.text" @updateText="updateText"></editor>
+        <editor
+          v-if="post"
+          :text="post.text"
+          :enabled="enabled"
+          @updateText="updateText"
+        ></editor>
 
         <v-card-actions>
           <v-flex>
@@ -43,6 +48,7 @@ export default {
     return {
       loading: false,
       text: "",
+      enabled: false,
       msg: {
         show: false,
         text: "",
@@ -52,6 +58,7 @@ export default {
   },
   mounted() {
     this.text = this.post.text;
+    this.enabled = true;
   },
   methods: {
     updateText(value) {

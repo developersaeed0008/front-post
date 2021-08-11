@@ -1,13 +1,13 @@
 import { postData } from "@/plugins/axios";
 
 const actions = {
-    async getPosts({ commit, state }) {
+    async getPosts({ commit, state }, source) {
         try {
-            if (state.loading) return;
 
+            if (state.loading) return;
             commit('setLoading', true);
 
-            let { posts } = await postData(`posts`, { 'p': state.limit }).catch(err => {
+            let { posts } = await postData(`posts`, { 'p': state.limit, 'liked': source == 'Liked' }).catch(err => {
                 throw new Error(err.response.data.message);
             });
 
@@ -64,7 +64,7 @@ const actions = {
         try {
             post.id = post._id;
             await postData("update-post", JSON.stringify(post)).catch(err => {
-                throw new Error(err.response.data.message);
+                throw new Error(err);
             });
             post.edit = false;
 

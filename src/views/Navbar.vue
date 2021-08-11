@@ -4,9 +4,7 @@
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
       <v-toolbar-title>
-        <v-btn router depressed class="primary" to="/">
-          <v-icon>mdi-home</v-icon> Posts
-        </v-btn>
+        <a href="/" class="primary"> <v-icon>mdi-home</v-icon> </a>
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
@@ -17,9 +15,9 @@
       <v-btn icon class="mx-1 d-none d-sm-flex">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
-      <v-btn icon class="mx-1 d-none d-sm-flex">
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
+      <a icon class="mx-1 d-none d-sm-flex" href="/liked">
+        <v-icon :color="$route.name == 'Liked' ? 'red' : ''">mdi-heart</v-icon>
+      </a>
 
       <v-btn icon class="mx-1 d-none d-sm-flex">
         <v-icon>mdi-bell</v-icon>

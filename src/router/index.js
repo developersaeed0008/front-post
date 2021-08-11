@@ -5,10 +5,14 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-
   {
     path: '/',
     name: 'Post',
+    component: () => import('../views/Post.vue')
+  },
+  {
+    path: '/liked',
+    name: 'Liked',
     component: () => import('../views/Post.vue')
   },
   {

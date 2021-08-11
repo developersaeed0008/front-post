@@ -12,7 +12,11 @@
           </template>
         </v-snackbar>
 
-        <editor :text="post.text" @updateText="updateText"></editor>
+        <editor
+          :text="post.text"
+          :enabled="enabled"
+          @updateText="updateText"
+        ></editor>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -40,9 +44,13 @@ export default {
   components: {
     editor: Editor,
   },
+  mounted() {
+    this.enabled = true;
+  },
   data() {
     return {
       loading: false,
+      enabled: false,
       post: {
         text: "",
       },

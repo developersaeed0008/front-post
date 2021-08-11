@@ -22,10 +22,7 @@
             >
           </v-card-title>
           <v-divider></v-divider>
-          <v-card-text
-            class="headline text-lg-2 text-right rtl black--text"
-            v-if="!post.edit"
-          >
+          <v-card-text class="headline text-lg-2 text-right rtl black--text">
             <div
               v-if="post.text.length <= 200 || post.showMore"
               v-html="post.text.replace(/\n/g, '<br />')"
@@ -39,16 +36,18 @@
             ></div>
             <v-btn
               v-if="post.text.length > 200 && !post.showMore"
-              class="ma-4"
-              depressed
+              class="ma-4 font-weight-bold"
+              small
+              text
               @click="post.showMore = true"
               >See More</v-btn
             >
 
             <v-btn
               v-if="post.text.length > 200 && post.showMore"
-              class="ma-4"
-              depressed
+              class="ma-4 font-weight-bold"
+              small
+              text
               @click="post.showMore = false"
               >See Less</v-btn
             >
@@ -135,7 +134,7 @@ import moment from "moment";
 export default {
   async mounted() {
     window.addEventListener("scroll", this.handleScroll);
-    if (this.isAuth) this.$store.dispatch("getPosts");
+    if (this.isAuth) this.$store.dispatch("getPosts", this.$route.name);
   },
   components: {
     "color-palette": ColorPalette,
@@ -196,7 +195,7 @@ export default {
         const { scrollHeight, clientHeight, scrollTop } = dom;
 
         if (scrollTop + clientHeight >= scrollHeight - scrollHeight * 0.05) {
-          if (this.isAuth) this.$store.dispatch("getPosts");
+          if (this.isAuth) this.$store.dispatch("getPosts", this.$route.name);
         }
       } catch (err) {
         this.status = err;
@@ -230,6 +229,9 @@ export default {
 /*
  * Droid Arabic Kufi (Arabic) http://www.google.com/fonts/earlyaccess
  */
+body {
+  font-size: 1rem;
+}
 @font-face {
   font-family: "Droid Arabic Kufi";
   font-style: normal;
@@ -248,10 +250,16 @@ export default {
 body,
 .v-application .headline {
   font-family: "Droid Arabic Kufi", serif !important;
-  font-size: 20px !important;
+  font-size: 1rem !important;
 }
-.rtl {
-  direction: rtl;
+.v-application p {
+  margin-bottom: 0;
+}
+.v-card__text br {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 2px;
+  line-height: 2px;
 }
 </style>
 
