@@ -5,6 +5,10 @@ const mutations = {
     },
     setToken(state, token) {
         state.token = token
+    },
+    clearTocken(state) {
+        state.isAuth = null;
+        state.token = null;
     }
 };
 

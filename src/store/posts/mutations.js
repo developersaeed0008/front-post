@@ -2,6 +2,10 @@ const mutations = {
     setPosts(state, posts) {
         state.posts = state.posts.concat(posts)
     },
+    restPosts(state) {
+        state.posts = [];
+        state.limit = 0;
+    },
     setLoading(state, loading) {
         state.loading = loading
     },

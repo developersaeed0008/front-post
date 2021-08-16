@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container>
+    <v-container class="mt-5">
       <v-snackbar v-model="msg.show" :timeout="3000" :color="msg.color">
         {{ msg.text }}
         <template v-slot:action="{ attrs }">
@@ -24,18 +24,31 @@
           <v-divider></v-divider>
           <v-card-text class="headline text-lg-2 text-right rtl black--text">
             <div
-              v-if="post.text.length <= 200 || post.showMore"
-              v-html="post.text.replace(/\n/g, '<br />')"
+              v-if="post.text.length <= textLength || post.showMore"
+              v-html="
+                post.text
+                  .replace(/\n/g, '<br />')
+                  .replaceAll(
+                    keywords,
+                    `<span class='purple lighten-2 white--text'>${keywords}</span>`
+                  )
+              "
             ></div>
 
             <div
               v-else
               v-html="
-                post.text.replace(/\n/g, '<br />').substr(0, 200) + ' ...'
+                post.text
+                  .replace(/\n/g, '<br />')
+                  .substr(0, textLength)
+                  .replaceAll(
+                    keywords,
+                    `<span class='purple lighten-2 white--text'>${keywords}</span>`
+                  ) + ' ...'
               "
             ></div>
             <v-btn
-              v-if="post.text.length > 200 && !post.showMore"
+              v-if="post.text.length > textLength && !post.showMore"
               class="ma-4 font-weight-bold"
               small
               text
@@ -44,7 +57,7 @@
             >
 
             <v-btn
-              v-if="post.text.length > 200 && post.showMore"
+              v-if="post.text.length > textLength && post.showMore"
               class="ma-4 font-weight-bold"
               small
               text
@@ -126,15 +139,21 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import ColorPalette from "./ColorPalette.vue";
 import EditPost from "./EditPost.vue";
 import moment from "moment";
 
 export default {
   async mounted() {
+    this.restPosts();
+    this.keywords = this.$route.query.keywords;
+
     window.addEventListener("scroll", this.handleScroll);
-    if (this.isAuth) this.$store.dispatch("getPosts", this.$route.name);
+
+    if (this.isAuth) {
+      this.$store.dispatch("getPosts");
+    }
   },
   components: {
     "color-palette": ColorPalette,
@@ -143,6 +162,8 @@ export default {
   data() {
     return {
       moment: moment,
+      keywords: "",
+      textLength: 300,
       showPalette: false,
       rules: [
         (v) => !!v || "This field is required",
@@ -159,6 +180,7 @@ export default {
   },
   methods: {
     ...mapActions(["updatePost", "likePost", "updateColor", "deletePost"]),
+    ...mapMutations(["restPosts"]),
     delPost(post) {
       try {
         this.$swal
@@ -195,7 +217,7 @@ export default {
         const { scrollHeight, clientHeight, scrollTop } = dom;
 
         if (scrollTop + clientHeight >= scrollHeight - scrollHeight * 0.05) {
-          if (this.isAuth) this.$store.dispatch("getPosts", this.$route.name);
+          if (this.isAuth) this.$store.dispatch("getPosts");
         }
       } catch (err) {
         this.status = err;

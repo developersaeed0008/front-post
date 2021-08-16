@@ -15,7 +15,10 @@ const config = {
 export async function getData(url) {
 
     const resp = await axios.get(url, config).catch(ex => {
-        if (ex.response.status == 403) router.push(loginUrl);
+        if (ex.response.status == 403) {
+            localStorage.removeItem('jwt');
+            router.push(loginUrl);
+        }
     });
 
     return resp;
@@ -24,7 +27,10 @@ export async function getData(url) {
 export async function postData(url, data) {
 
     const resp = await axios.post(url, data, config).catch(ex => {
-        if (ex.response.status == 403) router.push(loginUrl);
+        if (ex.response.status == 403) {
+            localStorage.removeItem('jwt');
+            router.push(loginUrl);
+        }
     });
 
     return resp.data;

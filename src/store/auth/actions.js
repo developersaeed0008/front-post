@@ -16,9 +16,11 @@ const actions = {
             });
 
         if (auth) {
+
             commit('setAuth', true);
             commit('setToken', auth.token);
             localStorage.setItem('jwt', auth.token);
+            localStorage.setItem('user', auth.user);
             //TODO router.push
             window.location = '/';
         }
