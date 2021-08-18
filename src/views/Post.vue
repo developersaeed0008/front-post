@@ -268,7 +268,9 @@ body {
     url(//fonts.gstatic.com/ea/droidarabickufi/v6/DroidKufi-Regular.ttf)
       format("truetype");
 }
-
+.rtl {
+  direction: rtl;
+}
 body,
 .v-application .headline {
   font-family: "Droid Arabic Kufi", serif !important;
