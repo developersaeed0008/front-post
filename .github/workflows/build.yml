@@ -38,4 +38,4 @@ jobs:
           server: ftp.deepsolution.site
           username: developer0008@post.deepsolution.site
           password: ${{ secrets.ftp_password }}
-          local-dir: build/
+          local-dir: dist/
