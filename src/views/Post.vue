@@ -165,10 +165,6 @@ export default {
       keywords: "",
       textLength: 300,
       showPalette: false,
-      rules: [
-        (v) => !!v || "This field is required",
-        (v) => v.length >= 10 || "Minimum length is 10 characters",
-      ],
       editingPost: "",
     };
   },
@@ -176,7 +172,8 @@ export default {
     avatar() {
       return "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light";
     },
-    ...mapGetters(["Posts", "loading", "msg", "isAuth"]),
+    ...mapGetters(["Posts", "loading", "msg"]),
+    ...mapGetters(["isAuth"]),
   },
   methods: {
     ...mapActions(["updatePost", "likePost", "updateColor", "deletePost"]),

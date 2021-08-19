@@ -1,6 +1,6 @@
 const getters = {
     isAuth: (state) => state.isAuth,
-    token: (state) => state.token
+    userName: (state) => state.user
 };
 
 export default getters;

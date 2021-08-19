@@ -1,6 +1,7 @@
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import auth from '../middleware/auth';
 
 Vue.use(VueRouter)
 
@@ -33,16 +34,6 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-
-  if (to.name != "login") {
-
-    if (!localStorage.getItem('jwt')) {
-      return next("login");
-    }
-  }
-
-  return next();
-});
+router.beforeResolve(auth);
 
 export default router

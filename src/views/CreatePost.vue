@@ -25,7 +25,7 @@
             block
             elevation="2"
             :loading="loading"
-            :disabled="!post.text"
+            :disabled="post.text.length < 20"
             rounded
             @click="savePost"
             class="mt-3 btn-md"
@@ -68,15 +68,17 @@ export default {
         if (!this.post.text) {
           return;
         }
+        this.loading = true;
         await this.createPost(this.post);
         this.loading = false;
 
         this.msg.text = "post created successfully !";
         this.msg.show = true;
         this.msg.color = "success";
-
-        this.editor = "";
-        this.hideDialog();
+        setTimeout(() => {
+          this.editor = "";
+          this.$emit("updateDg", false);
+        }, 500);
       } catch (err) {
         this.msg.text = err;
         this.msg.show = true;

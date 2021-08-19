@@ -1,6 +1,6 @@
-import getters from "./getters"
-import actions from "./actions"
-import mutations from "./mutations"
+import getters from "../posts/getters"
+import actions from "../posts/actions"
+import mutations from "../posts/mutations"
 
 const Posts = {
     state: {

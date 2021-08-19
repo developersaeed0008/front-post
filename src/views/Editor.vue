@@ -28,12 +28,12 @@ export default {
         plugins: [
           "advlist autolink lists link image charmap print preview anchor",
           "searchreplace visualblocks code fullscreen",
-          "insertdatetime media table paste code help wordcount emoticons link directionality",
+          "insertdatetime media table paste code help wordcount emoticons link directionality code",
         ],
         toolbar:
           "undo redo | formatselect | bold italic forecolor backcolor | \
            alignleft aligncenter alignright alignjustify | rtl ltr \
-           bullist numlist outdent indent  | link | emoticons",
+           bullist numlist outdent indent  | link | emoticons | code",
       },
     };
   },

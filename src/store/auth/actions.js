@@ -1,4 +1,5 @@
 import { postData } from "@/plugins/axios";
+import router from '@/router';
 
 const actions = {
 
@@ -19,10 +20,12 @@ const actions = {
 
             commit('setAuth', true);
             commit('setToken', auth.token);
+            commit('setUser', auth.user);
+
             localStorage.setItem('jwt', auth.token);
             localStorage.setItem('user', auth.user);
-            //TODO router.push
-            window.location = '/';
+
+            router.push('/');
         }
     },
 

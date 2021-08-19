@@ -28,12 +28,13 @@
       <v-btn icon class="mx-1 d-none d-sm-flex">
         <v-icon>mdi-bell</v-icon>
       </v-btn>
-      <span class="ml-2">{{ username }}</span>
+      <span class="ml-2">{{ userName }}</span>
       <v-btn class="primary" icon @click="logout">
         <v-icon right>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
     <create-post
+      v-if="showCreatePost"
       :show="showCreatePost"
       @updateDg="updateDialogState"
     ></create-post>
@@ -46,7 +47,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters } from "vuex";
 import CreatePost from "./CreatePost";
 export default {
   components: {
@@ -59,10 +60,9 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setAuth"]),
     logout() {
-      this.setAuth(false);
-      this.$router.push({ name: "login" });
+      this.$store.commit("clearToken");
+      this.$router.push("/login");
     },
     updateDialogState(value) {
       this.showCreatePost = value;
@@ -72,10 +72,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isAuth"]),
-    username() {
-      return localStorage.getItem("user");
-    },
+    ...mapGetters(["isAuth", "userName"]),
   },
 };
 </script>
