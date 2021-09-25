@@ -12,8 +12,7 @@ const actions = {
                 email: user.email,
                 password: user.password,
             })).catch((err) => {
-                //  this.errorLogin = err.response.data.message;
-                throw new Error(err.response.data.message);
+                throw new Error(err);
             });
 
         if (auth) {

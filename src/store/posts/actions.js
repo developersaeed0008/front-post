@@ -16,7 +16,7 @@ const actions = {
                 , liked
                 , keywords
             }).catch(err => {
-                throw new Error(err.response.data.message);
+                throw new Error(err);
             });
             /*  
             const posts = [
@@ -55,7 +55,7 @@ const actions = {
         try {
 
             const resp = await postData("add-post", JSON.stringify(post)).catch(err => {
-                throw new Error(err.response.data.message);
+                throw new Error(err);
             });
 
             commit('createPost', resp.createdPost);
