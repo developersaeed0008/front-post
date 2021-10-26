@@ -3,7 +3,7 @@
     <v-app-bar color="primary accent-4" dense dark fixed>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
       <v-toolbar-title
-        ><v-btn class="primary" to="/"><v-icon>mdi-home</v-icon></v-btn>
+        ><v-btn class="primary" to="/feeds"><v-icon>mdi-home</v-icon></v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div class="d-flex justify-center ma-5">
@@ -62,7 +62,7 @@ export default {
   methods: {
     logout() {
       this.$store.commit("clearToken");
-      this.$router.push("/login");
+      this.$router.push({ name: "login" });
     },
     updateDialogState(value) {
       this.showCreatePost = value;

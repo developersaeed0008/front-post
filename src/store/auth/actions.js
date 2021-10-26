@@ -12,7 +12,7 @@ const actions = {
                 email: user.email,
                 password: user.password,
             })).catch((err) => {
-                throw new Error(err);
+                console.error(err);
             });
 
         if (auth) {
@@ -24,7 +24,7 @@ const actions = {
             localStorage.setItem('jwt', auth.token);
             localStorage.setItem('user', auth.user);
 
-            router.push('/');
+            router.push({ name: 'Post' });
         }
     },
 

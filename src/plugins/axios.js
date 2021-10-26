@@ -18,7 +18,7 @@ export async function getData(url) {
     };
 
     const resp = await axios.get(url, config).catch(ex => {
-        if (ex.response.status == 403) {
+        if (ex.response && ex.response.status == 403) {
             store.commit("clearToken");
             router.push(loginUrl);
         }
