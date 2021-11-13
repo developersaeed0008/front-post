@@ -14,9 +14,9 @@
               <v-img class="elevation-6" alt="" :src="avatar"></v-img>
             </v-list-item-avatar>
             <v-spacer></v-spacer>
-            <v-icon> mdi-clock </v-icon>
+            <v-icon class="text--disabled" small> mdi-clock </v-icon>
             <span
-              class="pa-2"
+              class="pa-1 text--disabled"
               :title="moment(post.postDate).format('DD-MMM YYYY')"
               >{{ getDate(post.postDate) }}</span
             >
@@ -67,52 +67,51 @@
           </v-card-text>
 
           <v-divider></v-divider>
-          <v-card-actions>
-            <v-list-item>
-              <v-row class="d-flex justify-end">
-                <v-btn
-                  color="red"
-                  icon
-                  depressed
-                  class="mr-4"
-                  v-if="!post.edit"
-                  @click="delPost(post)"
-                  ><v-icon> mdi-delete-outline </v-icon>
-                </v-btn>
-                <v-btn
-                  color="primary"
-                  icon
-                  depressed
-                  class="mr-4"
-                  @click="editingPost = post"
-                  ><v-icon> mdi-square-edit-outline </v-icon>
-                </v-btn>
 
-                <v-btn
-                  color="warning"
-                  icon
-                  depressed
-                  class="mr-4"
-                  @click="updatePostDialog(post)"
-                  ><v-icon> mdi-palette </v-icon>
-                </v-btn>
-                <v-btn color="info" icon depressed class="mr-4 d-none">
-                  <v-icon> mdi-share-variant </v-icon>
-                </v-btn>
-                <v-btn
-                  color="red"
-                  depressed
-                  dark
-                  class="mr-4"
-                  :icon="!post.liked"
-                  v-if="!post.edit"
-                  @click="likePost(post)"
-                  ><v-icon :left="post.liked"> mdi-heart </v-icon>
-                  {{ post.liked ? " liked" : "" }}
-                </v-btn>
-              </v-row>
-            </v-list-item>
-          </v-card-actions>
+          <v-list-item>
+            <v-row class="d-flex justify-end">
+              <v-btn
+                color="red"
+                icon
+                depressed
+                class="mr-4"
+                v-if="!post.edit"
+                @click="delPost(post)"
+                ><v-icon> mdi-delete-outline </v-icon>
+              </v-btn>
+              <v-btn
+                color="primary"
+                icon
+                depressed
+                class="mr-4"
+                @click="editingPost = post"
+                ><v-icon> mdi-square-edit-outline </v-icon>
+              </v-btn>
+
+              <v-btn
+                color="warning"
+                icon
+                depressed
+                class="mr-4"
+                @click="updatePostDialog(post)"
+                ><v-icon> mdi-palette </v-icon>
+              </v-btn>
+              <v-btn color="info" icon depressed class="mr-4 d-none">
+                <v-icon> mdi-share-variant </v-icon>
+              </v-btn>
+              <v-btn
+                color="red"
+                depressed
+                dark
+                class="mr-4"
+                :icon="!post.liked"
+                v-if="!post.edit"
+                @click="likePost(post)"
+                ><v-icon :left="post.liked"> mdi-heart </v-icon>
+                {{ post.liked ? " liked" : "" }}
+              </v-btn>
+            </v-row>
+          </v-list-item>
         </v-card>
       </div>
       <v-card class="d-flex justify-center ma-5 pa-5" flat>
@@ -249,7 +248,7 @@ export default {
  * Droid Arabic Kufi (Arabic) http://www.google.com/fonts/earlyaccess
  */
 body {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 @font-face {
   font-family: "Droid Arabic Kufi";
@@ -269,9 +268,11 @@ body {
   direction: rtl;
 }
 body,
-.v-application .headline {
+.v-application .headline,
+.v-application span {
   font-family: "Droid Arabic Kufi", serif !important;
-  font-size: 1rem !important;
+  font-size: 0.9rem !important;
+  line-height: 1.4rem;
 }
 .v-application p {
   margin-bottom: 0;
@@ -281,6 +282,9 @@ body,
   margin-bottom: 2px;
   font-size: 2px;
   line-height: 2px;
+}
+.v-card__text ul {
+  margin: 1rem 1rem 0 !important;
 }
 </style>
 
