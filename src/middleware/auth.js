@@ -7,7 +7,7 @@ export default (to, from, next) => {
     const isAuth = store.state[1].isAuth;
 
     if (to.name != "login") {
-        if (!isAuth) return next("/login");
+        if (!isAuth) return next("/");
     }
 
     return next();

@@ -65,6 +65,9 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
+  mounted() {
+    if (this.isAuth) this.$router.push("/feeds");
+  },
   data() {
     return {
       user: {
