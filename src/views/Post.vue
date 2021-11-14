@@ -8,15 +8,19 @@
         </template>
       </v-snackbar>
       <div v-for="(post, i) in Posts" :key="i" class="mt-5">
-        <v-card :color="post.color">
+        <v-card :color="post.color" width="60%" style="margin: 0 auto">
           <v-card-title class="pt-0 pb-0">
             <v-list-item-avatar color="grey darken-3">
-              <v-img class="elevation-6" alt="" :src="avatar"></v-img>
-            </v-list-item-avatar>
+              <v-img
+                class="elevation-6"
+                alt=""
+                :src="avatar"
+              ></v-img> </v-list-item-avatar
+            >Saeed
             <v-spacer></v-spacer>
-            <v-icon class="text--disabled" small> mdi-clock </v-icon>
+            <v-icon small> mdi-clock </v-icon>
             <span
-              class="pa-1 text--disabled"
+              class="pa-1"
               :title="moment(post.postDate).format('DD-MMM YYYY')"
               >{{ getDate(post.postDate) }}</span
             >
@@ -169,7 +173,7 @@ export default {
   },
   computed: {
     avatar() {
-      return "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light";
+      return "https://avataaars.io/?avatarStyle=Circle&topType=ShortHairShortCurly&accessoriesType=Kurt&hairColor=Black&facialHairType=BeardLight&facialHairColor=Black&clotheType=BlazerShirt&eyeType=EyeRoll&eyebrowType=FlatNatural&mouthType=Smile&skinColor=Light";
     },
     ...mapGetters(["Posts", "loading", "msg"]),
     ...mapGetters(["isAuth"]),
