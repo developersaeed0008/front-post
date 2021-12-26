@@ -24,7 +24,8 @@ export async function getData(url) {
         }
     });
 
-    return resp;
+    if (resp)
+        return resp;
 }
 
 export async function postData(url, data) {
@@ -39,11 +40,12 @@ export async function postData(url, data) {
     };
 
     const resp = await axios.post(url, data, config).catch(ex => {
-        if (ex.response.status == 403) {
+        if (ex.response && ex.response.status == 403) {
             store.commit("clearToken");
             router.push(loginUrl);
         }
     });
 
-    return resp.data;
+    if (resp)
+        return resp.data;
 }

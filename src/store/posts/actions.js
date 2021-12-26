@@ -40,15 +40,10 @@ const actions = {
                 commit('setLimit', state.limit + 10);
             }
 
-
         } catch (err) {
 
             commit('setLoading', false);
-            commit('setMsg', {
-                text: err.message,
-                show: true,
-                color: "red",
-            });
+            console.error(err);
         }
     },
     async createPost({ commit }, post) {
