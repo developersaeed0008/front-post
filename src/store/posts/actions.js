@@ -15,9 +15,8 @@ const actions = {
                 'p': state.limit
                 , liked
                 , keywords
-            }).catch(err => {
-                console.error(err);
             });
+
             /*  
             const posts = [
                 {
@@ -28,17 +27,18 @@ const actions = {
                 }
             ];*/
             commit('setLoading', false);
-            if (posts.length) {
 
-                posts.forEach((post) => {
-                    post.showMore = false;
-                    post.liked = post.liked ? true : false;
-                    post.color = post.color ? post.color : '#fff';
-                });
+            if (!posts) return;
 
-                commit('setPosts', posts);
-                commit('setLimit', state.limit + 10);
-            }
+            posts.forEach((post) => {
+                post.showMore = false;
+                post.liked = post.liked ? true : false;
+                post.color = post.color ? post.color : '#fff';
+            });
+
+            commit('setPosts', posts);
+            commit('setLimit', state.limit + 10);
+
 
         } catch (err) {
 
