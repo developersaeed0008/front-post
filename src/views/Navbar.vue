@@ -25,7 +25,10 @@
       <v-btn icon class="mx-1 d-none d-sm-flex" to="/liked">
         <v-icon :color="$route.name == 'Liked' ? 'red' : ''">mdi-heart</v-icon>
       </v-btn>
-      <v-btn icon class="mx-1 d-none d-sm-flex">
+      <v-btn icon class="mx-1 d-none d-sm-flex" to="/box">
+        <v-icon>mdi-currency-usd</v-icon>
+      </v-btn>
+      <v-btn icon class="mx-1 d-none d-sm-flex" d-none>
         <v-icon>mdi-bell</v-icon>
       </v-btn>
       <span class="ml-2">{{ userName }}</span>
