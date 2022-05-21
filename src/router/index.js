@@ -25,7 +25,17 @@ const routes = [
     path: '/',
     name: 'login',
     component: () => import('../views/Login.vue')
-  }
+  },
+  {
+    path: '/boobs',
+    name: 'Boob',
+    component: () => import('../views/Boob.vue')
+  },
+  {
+    path: '/box',
+    name: 'Box',
+    component: () => import('../views/Box.vue')
+  },
 ]
 
 const router = new VueRouter({
