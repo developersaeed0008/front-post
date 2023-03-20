@@ -35,8 +35,8 @@ jobs:
       - name: Sync files to hosting
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
-          server: files.000webhost.com
-          username: includible-rice
+          server: ${{ user.HOST }}
+          username: ${{ user.USER }}
           password: ${{ secrets.ftp_password }}
           local-dir: dist/
           server-dir: public_html/

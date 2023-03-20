@@ -1,13 +1,33 @@
 <template>
   <div>
-    <v-container class="mt-5">
-      <v-row>
-        <v-col cols="8">
+    <v-container class="mt-5" id="boobs">
+      <v-row class="white pa-5">
+        <v-col cols="5">
           <v-text-field
             type="text"
             v-model="keywords"
             @keydown.enter="search"
           ></v-text-field>
+        </v-col>
+        <v-col cols="2">
+          <v-select
+            v-model="vidSource"
+            :items="targetList"
+            label="select source"
+            item-text="name"
+            item-value="link"
+            outlined
+          ></v-select>
+        </v-col>
+        <v-col cols="2" v-if="vidSource.indexOf('vk') != -1">
+          <v-select
+            v-model="vkPage"
+            :items="vkPages"
+            label="select page"
+            item-text="name"
+            item-value="link"
+            outlined
+          ></v-select>
         </v-col>
         <v-col cols="2">
           <v-btn
@@ -20,19 +40,51 @@
         </v-col>
       </v-row>
 
-      <v-progress-circular
-        v-if="loading"
-        indeterminate
-        color="blue"
-        :size="70"
-        :width="7"
-      ></v-progress-circular>
-      <v-row v-else>
+      <v-row class="white--bg pa-3 white">
+        <v-chip
+          v-for="star in stars"
+          :key="star"
+          class="ma-1 white--text"
+          color="blue"
+          @click="keywords = star"
+          >{{ star }}</v-chip
+        >
+      </v-row>
+      <v-row class="white--bg pa-3 white">
+        <v-chip
+          v-for="channel in channels"
+          :key="channel"
+          class="ma-1 white--text"
+          color="red"
+          @click="keywords = channel"
+          >{{ channel }}</v-chip
+        >
+      </v-row>
+
+      <v-row class="mt-5">
+        <v-progress-circular
+          v-if="loading"
+          indeterminate
+          color="blue"
+          :size="70"
+          :width="7"
+        ></v-progress-circular>
+        <v-alert
+          v-else-if="!loading && keywords && videos.length == 0"
+          border="left"
+          outlined
+          text
+          type="warning"
+          >keywords not match any result</v-alert
+        >
         <v-card
+          v-else
           class="mx-auto my-2"
           max-width="374"
           v-for="(video, i) in videos"
           :key="i"
+          @mouseenter="video.info = true"
+          @mouseleave="video.info = false"
         >
           <a :href="video.src" :target="'new-' + video.src">
             <v-lazy-image
@@ -44,15 +96,15 @@
 
           <v-card-title>
             <a
-              :href="video.link"
-              :target="'new-' + video.link"
+              :href="video.href"
+              :target="'new-' + video.href"
               class="text-subtitle-1"
               >{{ video.title }}</a
             >
           </v-card-title>
 
           <v-card-text>
-            <v-row align="center" class="mx-0">
+            <v-row align="center" class="mx-0" v-if="video.info">
               <v-rating
                 :value="4.5"
                 color="amber"
@@ -64,7 +116,7 @@
               <div class="grey--text ms-1">4.5 (413)</div>
             </v-row>
 
-            <v-row class="my-1 text-subtitle-1">
+            <v-row class="text-subtitle-1">
               <v-col cols="6" class="text-center">{{ video.date }}</v-col>
               <v-col cols="6" class="text-center">{{
                 humanDate(video.date)
@@ -72,9 +124,10 @@
             </v-row>
           </v-card-text>
 
-          <v-divider class="mx-1"></v-divider>
+          <v-divider class="mx-1" v-if="video.info"></v-divider>
 
           <v-chip-group
+            v-if="video.info"
             active-class="deep-purple accent-4 white--text"
             class="pa-2"
             column
@@ -103,32 +156,118 @@ export default {
       moment: moment,
       videos: [],
       keywords: "",
+      vidSource: "",
+      vkPage: "",
       loading: false,
+      baseUrl: process.env.VUE_APP_SRCAPING,
+      targetList: [
+        { name: "hot", link: "hot/links" },
+        { name: "VK", link: "vk/links" },
+      ],
+      vkPages: [
+        { name: "Plumperpass", link: "@world_bbw" },
+        { name: "PORNO Full HD ", link: "@public172454327" },
+        { name: "KAMASTETICA", link: "@zzprn" },
+        { name: "clubporn school", link: "@clubporn_school" },
+        { name: "COZI ", link: "@thecozi" },
+        { name: "COZY ", link: "@thecozy" },
+        { name: "legal porno", link: "@i_love_pornn" },
+        { name: "+18 ", link: "@lvnprn18" },
+        { name: "porno ", link: "@club170274984" },
+        { name: "club ", link: "@clubanal_school" },
+      ],
+      stars: [
+        "Skylar Vox",
+        "Lucie Wilde",
+        "Alyx Star",
+        "Jakie hoff",
+        "Krystal Swift",
+        "Sofia Lee",
+        "Ella Knox",
+        "Abigaiil Morris",
+        "Skylar Snow",
+        "Kate Dee",
+        "Ava Addams",
+        "Angela White",
+        "Angel Youngs",
+        "Lauren Phillips",
+        "Kendra Sunderland",
+        "Codi Vore",
+        "Taylee Wood",
+        "NATASHA NICE",
+        "BLAKE BLOSSOM",
+        "ELIZA IBARRA",
+        "Chloe Surreal",
+        "VANNA BARDOT",
+        "SKYE BLUE",
+        "KAYLEY GUNNER",
+        "Angel Deluca",
+        "Nyx Monroe",
+        "Harmony White",
+        "Mya Blair",
+        "Diana Eisley",
+        "Milly Marx",
+        "Stella Daniels",
+        "Jessica Rivers",
+        "Andi Ray",
+        "Briana Black",
+        "CALLIE MACK",
+        "CHANEL BARBIE",
+        "Elisa Mae",
+        "REFLEXION",
+      ],
+      channels: [
+        "BrazzersExxtra",
+        "Private",
+        "blacked",
+        "rkprime",
+        "pornworld",
+        "PenthouseGold",
+        "PornMegaLoad",
+        "PlumperPass",
+        "LegalPorno",
+        "analvids",
+        "naughtyamerica",
+        "Inserted",
+        "FamilyTherapyXXX",
+        "AssParade",
+        "ArchAngel",
+        "Bang",
+        "GotMylf",
+        "RodneyMoore",
+      ],
     };
   },
   computed: {},
   methods: {
     async search() {
-      if (!this.keywords) return;
+      if (!this.vidSource) return;
 
       this.loading = true;
 
-      const resp = await postData("/links", {
-        keywords: this.keywords.replace(" ", "+"),
+      const resp = await postData(this.baseUrl + this.vidSource, {
+        keywords: this.keywords,
+        page: this.vkPage,
       });
+
+      resp.forEach((res) => (res.info = false));
+
       this.videos = resp;
       this.loading = false;
     },
     async getThumbnail(video) {
-      if (video.img) return;
+      if (video.img || this.vkPage) return;
 
-      let imgLink = await postData("/image", { link: video.link });
+      let imgLink = await postData(this.baseUrl + "hot/image", {
+        link: video.href,
+      });
 
       video.img = imgLink.link;
       video.src = imgLink.src;
     },
     humanDate(date) {
-      return moment(date).fromNow();
+      let dt = moment(date);
+      if (dt.isValid()) return dt.fromNow();
     },
   },
 };
@@ -136,5 +275,16 @@ export default {
 <style scoped>
 .v-lazy-image {
   width: 100%;
+}
+#boobs a.text-subtitle-1 {
+  white-space: nowrap;
+  overflow: hidden;
+}
+#boobs a.text-subtitle-1:hover {
+  white-space: normal;
+  overflow: none;
+}
+#boobs .v-card__title {
+  padding: 0.5rem;
 }
 </style>
