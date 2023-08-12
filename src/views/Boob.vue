@@ -60,25 +60,15 @@
           >{{ channel }}</v-chip
         >
       </v-row>
-
-      <v-row class="mt-5">
-        <v-progress-circular
+<v-progress-circular
           v-if="loading"
           indeterminate
           color="blue"
           :size="70"
           :width="7"
         ></v-progress-circular>
-        <v-alert
-          v-else-if="!loading && keywords && videos.length == 0"
-          border="left"
-          outlined
-          text
-          type="warning"
-          >keywords not match any result</v-alert
-        >
+      <v-row class="mt-5" v-if="!loading">
         <v-card
-          v-else
           class="mx-auto my-2"
           max-width="374"
           v-for="(video, i) in videos"
@@ -144,7 +134,7 @@
 <script>
 import { postData } from "../plugins/axios";
 import moment from "moment";
-import VLazyImage from "v-lazy-image/v2";
+import VLazyImage from "v-lazy-image";
 
 export default {
   components: {
