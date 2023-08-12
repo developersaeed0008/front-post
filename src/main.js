@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import './plugins/sweetalert2';
-
+import '@mdi/font/css/materialdesignicons.css'
 Vue.config.productionTip = false
 
 //store.$axios = axios;
