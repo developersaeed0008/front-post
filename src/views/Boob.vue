@@ -60,12 +60,13 @@
           >{{ channel }}</v-chip
         >
       </v-row>
-<v-progress-circular
+      <v-progress-circular
           v-if="loading"
           indeterminate
           color="blue"
           :size="70"
           :width="7"
+          class="mt-5"
         ></v-progress-circular>
       <v-row class="mt-5" v-if="!loading">
         <v-card
@@ -79,9 +80,11 @@
           <a :href="video.src" :target="'new-' + video.src">
             <v-lazy-image
               height="250"
-              :src="video.img"
+              src=""
               @intersect="getThumbnail(video)"
+             
             />
+            <img :src="video.img"  @key="video.href" v-if="video.img" style="width:100%" class="pa-1">
           </a>
 
           <v-card-title>
@@ -93,8 +96,8 @@
             >
           </v-card-title>
 
-          <v-card-text>
-            <v-row align="center" class="mx-0" v-if="video.info">
+          <v-card-text v-if="video.info">
+            <v-row align="center" class="mx-0">
               <v-rating
                 :value="4.5"
                 color="amber"
@@ -247,7 +250,7 @@ export default {
     },
     async getThumbnail(video) {
       if (video.img || this.vkPage) return;
-
+      
       let imgLink = await postData(this.baseUrl + "hot/image", {
         link: video.href,
       });
