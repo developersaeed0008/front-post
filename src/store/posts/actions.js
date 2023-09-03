@@ -53,12 +53,17 @@ const actions = {
                 console.error(err);
             });
 
+            commit('setLoading', false);
+
+            if (!resp) return;
+
             commit('createPost', resp.createdPost);
+
+            return resp.createdPost;
 
 
         } catch (err) {
 
-            commit('setLoading', false);
             commit('setMsg', {
                 text: err.message,
                 show: true,
@@ -68,11 +73,15 @@ const actions = {
     },
     async updatePost({ commit }, post) {
         try {
+
             post.id = post._id;
-            await postData("update-post", JSON.stringify(post)).catch(err => {
+
+            const resp = await postData("update-post", JSON.stringify(post)).catch(err => {
                 console.error(err);
             });
+
             post.edit = false;
+            if (!resp) return;
 
             commit('updatePost', post);
             commit('setMsg', {
@@ -80,6 +89,8 @@ const actions = {
                 show: true,
                 color: "success",
             });
+
+            return resp;
 
         } catch (err) {
 
@@ -127,24 +138,22 @@ const actions = {
             });
         }
     },
-    deletePost({ commit }, id) {
+    async deletePost({ commit }, id) {
 
-        postData("delete-post", JSON.stringify({ id })).then(() => {
-
-            commit('deletePost', id);
-
-            commit('setMsg', {
-                text: "post has been deleted",
-                show: true,
-                color: "success",
-            });
-        }).catch(err => {
-            commit('setMsg', {
-                text: err.message,
-                show: true,
-                color: "red",
-            });
+        const resp = await postData("delete-post", JSON.stringify({ id })).catch(err => {
+            console.log(err);
         });
+
+        commit('deletePost', id);
+
+        commit('setMsg', {
+            text: "post has been deleted",
+            show: true,
+            color: "success",
+        });
+
+        return resp;
+
     }
 };
 

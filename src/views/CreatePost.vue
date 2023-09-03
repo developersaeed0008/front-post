@@ -65,16 +65,28 @@ export default {
     ...mapActions(["createPost"]),
     async savePost() {
       try {
+
         if (!this.post.text) {
           return;
         }
         this.loading = true;
-        await this.createPost(this.post);
+
+        const post = await this.createPost(this.post);
+
         this.loading = false;
+
+        if (!post)
+        {
+          this.msg.text = "connection error !";
+          this.msg.show = true;
+          this.msg.color = "red";
+          return;
+        } 
 
         this.msg.text = "post created successfully !";
         this.msg.show = true;
         this.msg.color = "success";
+
         setTimeout(() => {
           this.editor = "";
           this.$emit("updateDg", false);
@@ -82,7 +94,7 @@ export default {
       } catch (err) {
         this.msg.text = err;
         this.msg.show = true;
-        this.msg.color = "danger";
+        this.msg.color = "red";
       }
     },
     updateText(value) {

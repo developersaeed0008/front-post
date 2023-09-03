@@ -195,7 +195,7 @@ export default {
           })
           .then((result) => {
             if (result.isConfirmed) {
-              this.deletePost(post._id);
+               this.deletePost(post._id);
             }
           });
       } catch (err) {
@@ -236,9 +236,17 @@ export default {
       this.updateColor(post);
       this.postEditColor = "";
     },
-    updatePostText(text) {
+    async updatePostText(text) {
       this.editingPost.text = text;
-      this.updatePost(this.editingPost);
+      const post =await this.updatePost(this.editingPost);
+
+      if (!post)
+      {
+        this.msg.text = "connection error !";
+        this.msg.show = true;
+        this.msg.color = "red";
+        return;
+      } 
       this.editingPost = null;
     },
     cancelEdit() {
