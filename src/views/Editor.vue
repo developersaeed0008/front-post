@@ -2,7 +2,7 @@
   <div>
     <editor
       v-model="editorText"
-      api-key="no-api-key"
+      api-key="ni144fb3ugtpfnnl06aebtjlgp2xk8yrmggqmvzrb15cw8ly"
       @input="editorInput"
       :init="config"
       v-if="enabled"
