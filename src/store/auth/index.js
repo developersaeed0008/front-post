@@ -5,7 +5,7 @@ import mutations from "../auth/mutations"
 const Auth = {
 
     state: {
-        isAuth: localStorage.getItem("jwt") != '',
+        isAuth: localStorage.getItem("jwt") != null,
         token: localStorage.getItem("jwt"),
         user: localStorage.getItem("user")
     },
